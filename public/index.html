@@ -179,7 +179,11 @@
 			</div>
 			</div>
 		</div>
-		
+		<div class="row alert alert-info">
+		<div class="col-md-6">Body Mass Index (BMI): <span id="bmi" class="badge">None</span></div>
+		<div class="col-md-6">Waist-to-hip ratio: <span id="waistToHip" class="badge">None</span></div>
+		</div>
+		<div id="idea"></div>
 		  </div>
 		  <div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -235,14 +239,39 @@
 				var heightFine = parseFloat($('#heightFine').val() || 0);
 				var weight = parseFloat($('#weight').val() || 0);
 				var waistToHipRatio = $('#waistToHipRatio').val();
-				console.log(sex);
-				console.log(height);
-				console.log(heightFine);
-				console.log(weight);
-				console.log(waistToHipRatio);
-				
+
+				predict.bmi(weight, height * 12 + heightFine);
+				predict.waistToHipRatio(waistToHipRatio);
 			});
 		});
+		
+		var predict = {};
+		predict.bmi = function(weight, height) {
+			var bmi = 0;
+			if (weight && height) {
+				bmi = weight / Math.pow(height, 2) * 703
+				$('#bmi').text(bmi.toFixed(1));
+			} else {
+				$('#bmi').text('None');
+			}
+			return bmi;
+		}
+		predict.waistToHipRatio = function(mapKey) {
+			
+			waistToHipMap = [0, 0.7, 0.9, 1.0, 1.5]
+		
+			if (mapKey > 0 && mapKey <= 3) {
+				$('#waistToHip').text('around ' + waistToHipMap[mapKey]);
+			} else if (mapKey == 4) {
+				$('#waistToHip').text('greater than 1.');
+			} else {
+				$('#waistToHip').text('None');
+			}
+			return waistToHipMap[mapKey];
+		}
+		predict.idea = function(sex, bmi, waistToHipRatio) {
+			//if 
+		}
 	</script>
 </body>
 </html>
